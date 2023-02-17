@@ -1,0 +1,12 @@
+DROP TABLE InsuranceCoversPaymentByInsurance;
+DROP TABLE PaymentPaysForAppointment;
+DROP TABLE PatientHasInsurance;
+DROP TABLE PatientReferPatient;
+DROP TABLE PatientPaymentInfo;
+DROP TABLE PaymentByInsurance;
+DROP TABLE PaymentByCash;
+DROP TABLE Payment;
+DROP TABLE Insurance;
+DROP TABLE Appointment;
+DROP TABLE Dentist;
+DROP TABLE Patient;
