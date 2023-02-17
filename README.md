@@ -22,6 +22,204 @@ The database model is for a dental clinic with multiple dentists, each of whom h
 * All payments pay for an appointment
 * Each appointment is paid by either or both the patient and the insurance policy.
 ## EER Modeling Diagram
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![EER Modeling Diagram](https://github.com/luan30092000/DentistDataBase/blob/main/Asset/EER_Modeling.png)
+## ER-Model Mapping to Database Relational Schema
+* Patient (PatientID, DOB, First_Name, Last_Name, Gender, Address, Phone)
+* Dentist ((DOB, First_Name, Last_Name), Phone)
+* Appointment (AppointmentID , Date, StartTime, Duration, Description, Charge, PatientID, (DOB, Dentist_FirstName, Dentist_LastName))
+* Insurance ( CompanyName, Policy#, Coverage Percentage) Payment ( PaymentID, Date, Amount)
+* PayByCash(PaymentID, PatientID) PayByInsurance(PaymentID)
+* PatientReferPatient (RefererID, RefereeID) PatientPaymentInfo(Card#, ExpiredDate, PatientID)
+* PatientHasInsurance ((PatientID, InsuranceCompName)) PaymentPaysAppointment(PaymentID, AppointmentID) InsuranceCoversPaymentByInsurance( CompName, InsurancePaymentID)
+## Normalization, up to BCNF
+- Patient
+	+ PatientID -> DOB, First_Name, Last_Name, Gender, Address, Phone
+	+ 1NF: No multivalued attributes or nested relations in Patient.
+	+ 2NF: DOB, First_Name, Last_Name, Gender, Address and Phone are fully functionally dependent on PatientID. 
+	+ 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Patient, the LHS is the key.
+- Dentist
+	+ {DOB, First_Name, Last_Name } -> Phone
+	+ 1NF: No multivalued attributes or nested relations in Dentist.
+	+ 2NF: Phone is fully functionally dependent on {DOB, First_Name, Last_Name }. 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Dentist, the LHS is the key.
+- Appointment
+	+ AppointmentID -> Date, StartTime, Duration, Description, PatientID, { DOB, Name }
+	+ 1NF: No multivalued attributes or nested relations in Appointment.
+	+ 2NF: Date, StartTime, Duration, Description, PatientID, and { DOB, Name } are fully functionally dependent on AppointmentID. 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Appointment, the LHS is the key.
+- Insurance
+	+ {CompanyName, Policy#} -> Coverage Percentage
+	+ 1NF: No multivalued attributes or nested relations in Insurance.
+	+ 2NF: Coverage Percentage are fully functionally dependent on CompanyName, Policy#. 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Insurance, the LHS is the key.
+- Payment
+	+ PaymentID -> Date, Amount
+	+ 1NF: No multivalued attributes or nested relations in Payment.
+	+ 2NF: Date and Amount are fully functionally dependent on PaymentID. 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Payment, the LHS is the key.
+- Pay_by_Cash
+	+ PaymentID -> PatientID
+	+ 1NF: No multivalued attributes or nested relations in Pay_by_Cash. 2NF: PatientID are fully functionally dependent on PaymentID. 3NF: There are no transitive dependencies.
+	+ BCNF: For all FDs of Pay_by_Cash_by_Cash, the LHS is the key.
+- Pay_by_Insurrance
+	+ No function dependency
+- PatientPaymentInfo
+	+ No function dependency
+- PatientHasInsurance
+	+ No function dependency
+- PaymentPaysAppointment 
+	+ No function dependency
+- InsuranceCoversPaymentByInsurance 
+	+ No function dependency
+## Data Types (Domain) and Constraits
+- Patient
+	+ PatientID NUMERIC 
+	+ Name VARCHAR(30) DOB DATE
+	+ Address VARCHAR(50) 
+	+ Gender CHAR(1) 
+	+ Phone VARCHAR(10) 
+	+ Card# VARCHAR(16) 
+	+ Expired Date DATE
+- Dentist
+	+ Name VARCHAR(30)	Constraint CHECK only ‘F’, ‘M’, ‘O’ are accepted
+	+ DOB DATE 
+	+ Phone CHAR(10)
+- Appointment 
+	+ AppointmentID NUMERIC
+	+ Date  DATE
+	+ StartTime TIME
+	+ Duration SMALLINT
+	+ Description VARCHAR(100)
+	+ Charge NUMERIC
+- Payment_by_Cash
+	+ PaymentID NUMERIC
+	+ Amount NUMERIC
+- Payment_by_Insurrance
+	+ PaymentID NUMERIC
+	+ PaymentDate DATE
+	+ Amount NUMERIC
+- Insurance
+	+ CompName VARCHAR(30)
+	+ %Coverage NUMERIC CONSTRAINT CHECK Coverage > 0 and Coverage <= 100
+	+ PolicyNumber NUMERIC
+## Query
+Create table data
+``` SQL {
+CREATE TABLE Patient (
+	PatientID NUMERIC IDENTITY(1,1),
+	First_Name VARCHAR(30) NOT NULL,
+	Last_Name VARCHAR(30) NOT NULL,
+	DOB	DATE,
+	Gender CHAR(1) CHECK (Gender = 'F' OR Gender = 'M' OR Gender = 'O'),
+	Address VARCHAR(50),
+	Phone VARCHAR(10) NOT NULL,
 
+	PRIMARY KEY (PatientID)
+);
 
+CREATE TABLE Dentist (
+	First_Name VARCHAR(30),
+	Last_Name VARCHAR(30),
+	DOB DATE,
+	Phone VARCHAR(10) NOT NULL,
+
+	PRIMARY KEY(First_Name, Last_Name, DOB)
+);
+
+CREATE TABLE Appointment (
+	AppointmentID NUMERIC IDENTITY(1,1),
+	Date DATE NOT NULL,
+	StartTime TIME NOT NULL,
+	Duration SMALLINT NOT NULL CHECK (Duration > 0),
+	Description VARCHAR(100),
+	PatientID NUMERIC, 
+	Dentist_FirstName VARCHAR(30),
+	Dentist_LastName VARCHAR(30),
+	Dentist_DOB DATE,
+	Cost FLOAT,
+
+	PRIMARY KEY (AppointmentID),
+	FOREIGN KEY (PatientID) REFERENCES Patient ON DELETE CASCADE,
+	FOREIGN KEY (Dentist_FirstName, Dentist_LastName, Dentist_DOB) REFERENCES Dentist ON DELETE CASCADE
+);
+
+CREATE TABLE Insurance (
+	CompanyName VARCHAR(30),
+	Policy_Num NUMERIC,
+	Coverage_Percent NUMERIC NOT NULL,
+
+	PRIMARY KEY (CompanyName, Policy_Num)
+);
+
+CREATE TABLE Payment (
+	PaymentID NUMERIC IDENTITY(1,1),
+	PaymentDate DATE,
+	Amount FLOAT NOT NULL,
+
+	PRIMARY KEY (PaymentID)
+);
+
+CREATE TABLE PaymentByCash (
+	PaymentID NUMERIC,
+	PatientID NUMERIC,
+	
+	PRIMARY KEY (PaymentID),
+	FOREIGN KEY (PaymentID) REFERENCES Payment,
+	FOREIGN KEY (PatientID) REFERENCES Patient
+);
+
+CREATE TABLE PaymentByInsurance (
+	PaymentID NUMERIC,
+
+	PRIMARY KEY(PaymentID),
+	FOREIGN KEY(PaymentID) REFERENCES Payment
+);
+
+CREATE TABLE PatientPaymentInfo (
+	PatientID NUMERIC, 
+	Card_Num VARCHAR(16),
+	Expired_Date DATE,
+
+	PRIMARY KEY (PatientID, Card_Num, Expired_Date),
+	FOREIGN KEY (PatientID) REFERENCES Patient ON DELETE CASCADE
+);
+
+CREATE TABLE PatientReferPatient (
+	RefererID NUMERIC,
+	RefereeID NUMERIC,
+
+	PRIMARY KEY (RefererID, RefereeID),
+	FOREIGN KEY(RefererID) REFERENCES Patient,
+	FOREIGN KEY(RefereeID) REFERENCES Patient
+);
+
+CREATE TABLE PatientHasInsurance (
+	PatientID NUMERIC,
+	Insurance_CompName VARCHAR(30),
+	Insurance_PolicyNum NUMERIC,
+
+	PRIMARY KEY (PatientID, Insurance_CompName, Insurance_PolicyNum),
+	FOREIGN KEY (PatientID) REFERENCES Patient ON DELETE CASCADE,
+	FOREIGN KEY (Insurance_CompName, Insurance_PolicyNum) REFERENCES Insurance ON DELETE CASCADE
+);
+
+CREATE TABLE PaymentPaysForAppointment (
+	PaymentID NUMERIC,
+	AppointmentID NUMERIC,
+
+	PRIMARY KEY (PaymentID, AppointmentID),
+	FOREIGN KEY (PaymentID) REFERENCES Payment,
+	FOREIGN KEY (AppointmentID) REFERENCES Appointment
+);
+
+CREATE TABLE InsuranceCoversPaymentByInsurance (
+	Insurance_CompName VARCHAR(30),
+	Insurance_PolicyNum NUMERIC,
+	InsurancePaymentID NUMERIC,
+
+	PRIMARY KEY(Insurance_CompName, Insurance_PolicyNum, InsurancePaymentID),
+	FOREIGN KEY(Insurance_CompName, Insurance_PolicyNum) REFERENCES Insurance,
+	FOREIGN KEY(InsurancePaymentID) REFERENCES PaymentByInsurance
+);
+}```
