@@ -3,6 +3,7 @@
 The purpose of this project is to design a comprehensive database model for a dental clinic that will store information related to staff members, patients, payment methods, insurance policies, and more. This project is being developed as an academic project for a database systems course. 
 
 As an extension to this project, I am also building a web application that will allow users to input data and use PHP to send that data to a MySQL database on a local server using the MAMP application.
+Requirement (macOS): MAMP(free), mySQL
 - An insurance policy is uniquely identified by the company name, has a policy number and coverage percent.
 - A payment is uniquely identified by paymentID, has date and amount paid.
 - A referral is a weak entity uniquely identified by patientID and the referral’s name. It has referral’s date of birth and name.
