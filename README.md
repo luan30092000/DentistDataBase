@@ -1,6 +1,8 @@
 # DentistDataBase
 ## Project Description
-The database model is for a dental clinic with multiple dentists, each of whom has their own set of patients. For each patient, there may be several appointments scheduled on different days and times. Additionally, each patient may have one or more insurance policies, which we need to track in our database. For patients who don't have insurance, we need to store their payment history in detail, including whether they paid all expenses at once or in installments. Furthermore, we need to track referrals made by patients, including those from their friends and family. All of this information will be stored in the database.
+The purpose of this project is to design a comprehensive database model for a dental clinic that will store information related to staff members, patients, payment methods, insurance policies, and more. This project is being developed as an academic project for a database systems course. 
+
+As an extension to this project, I am also building a web application that will allow users to input data and use PHP to send that data to a MySQL database on a local server using the MAMP application.
 - An insurance policy is uniquely identified by the company name, has a policy number and coverage percent.
 - A payment is uniquely identified by paymentID, has date and amount paid.
 - A referral is a weak entity uniquely identified by patientID and the referral’s name. It has referral’s date of birth and name.
