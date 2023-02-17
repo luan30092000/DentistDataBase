@@ -32,77 +32,77 @@ The database model is for a dental clinic with multiple dentists, each of whom h
 * PatientReferPatient (RefererID, RefereeID) PatientPaymentInfo(Card#, ExpiredDate, PatientID)
 * PatientHasInsurance ((PatientID, InsuranceCompName)) PaymentPaysAppointment(PaymentID, AppointmentID) InsuranceCoversPaymentByInsurance( CompName, InsurancePaymentID)
 ## Normalization, up to BCNF
-- Patient
+- `Patient`
 	+ PatientID -> DOB, First_Name, Last_Name, Gender, Address, Phone
 	+ 1NF: No multivalued attributes or nested relations in Patient.
 	+ 2NF: DOB, First_Name, Last_Name, Gender, Address and Phone are fully functionally dependent on PatientID. 
 	+ 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Patient, the LHS is the key.
-- Dentist
+- `Dentist`
 	+ {DOB, First_Name, Last_Name } -> Phone
 	+ 1NF: No multivalued attributes or nested relations in Dentist.
 	+ 2NF: Phone is fully functionally dependent on {DOB, First_Name, Last_Name }. 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Dentist, the LHS is the key.
-- Appointment
+- `Appointment`
 	+ AppointmentID -> Date, StartTime, Duration, Description, PatientID, { DOB, Name }
 	+ 1NF: No multivalued attributes or nested relations in Appointment.
 	+ 2NF: Date, StartTime, Duration, Description, PatientID, and { DOB, Name } are fully functionally dependent on AppointmentID. 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Appointment, the LHS is the key.
-- Insurance
+- `Insurance`
 	+ {CompanyName, Policy#} -> Coverage Percentage
 	+ 1NF: No multivalued attributes or nested relations in Insurance.
 	+ 2NF: Coverage Percentage are fully functionally dependent on CompanyName, Policy#. 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Insurance, the LHS is the key.
-- Payment
+- `Payment`
 	+ PaymentID -> Date, Amount
 	+ 1NF: No multivalued attributes or nested relations in Payment.
 	+ 2NF: Date and Amount are fully functionally dependent on PaymentID. 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Payment, the LHS is the key.
-- Pay_by_Cash
+- `Pay_by_Cash`
 	+ PaymentID -> PatientID
 	+ 1NF: No multivalued attributes or nested relations in Pay_by_Cash. 2NF: PatientID are fully functionally dependent on PaymentID. 3NF: There are no transitive dependencies.
 	+ BCNF: For all FDs of Pay_by_Cash_by_Cash, the LHS is the key.
-- Pay_by_Insurrance
+- `Pay_by_Insurrance`
 	+ No function dependency
-- PatientPaymentInfo
+- `PatientPaymentInfo`
 	+ No function dependency
-- PatientHasInsurance
+- `PatientHasInsurance`
 	+ No function dependency
-- PaymentPaysAppointment 
+- `PaymentPaysAppointment` 
 	+ No function dependency
-- InsuranceCoversPaymentByInsurance 
+- `InsuranceCoversPaymentByInsurance` 
 	+ No function dependency
 ## Data Types (Domain) and Constraits
 - Patient
-	+ PatientID NUMERIC 
-	+ Name VARCHAR(30) DOB DATE
-	+ Address VARCHAR(50) 
-	+ Gender CHAR(1) 
-	+ Phone VARCHAR(10) 
-	+ Card# VARCHAR(16) 
-	+ Expired Date DATE
+	+ PatientID `NUMERIC` 
+	+ Name `VARCHAR(30)` DOB DATE
+	+ Address `VARCHAR(50)` 
+	+ Gender `CHAR(1)` 
+	+ Phone `VARCHAR(10)` 
+	+ Card# `VARCHAR(16)` 
+	+ Expired Date `DATE`
 - Dentist
-	+ Name VARCHAR(30)	Constraint CHECK only ‘F’, ‘M’, ‘O’ are accepted
-	+ DOB DATE 
-	+ Phone CHAR(10)
+	+ Name `VARCHAR(30)`	Constraint CHECK only ‘F’, ‘M’, ‘O’ are accepted
+	+ DOB `DATE` 
+	+ Phone `CHAR(10)`
 - Appointment 
-	+ AppointmentID NUMERIC
-	+ Date  DATE
-	+ StartTime TIME
-	+ Duration SMALLINT
-	+ Description VARCHAR(100)
-	+ Charge NUMERIC
+	+ AppointmentID `NUMERIC`
+	+ Date  `DATE`
+	+ StartTime `TIME`
+	+ Duration `SMALLINT`
+	+ Description `VARCHAR(100)`
+	+ Charge `NUMERIC`
 - Payment_by_Cash
-	+ PaymentID NUMERIC
-	+ Amount NUMERIC
+	+ PaymentID `NUMERIC`
+	+ Amount `NUMERIC`
 - Payment_by_Insurrance
-	+ PaymentID NUMERIC
-	+ PaymentDate DATE
-	+ Amount NUMERIC
+	+ PaymentID `NUMERIC`
+	+ PaymentDate `DATE`
+	+ Amount `NUMERIC`
 - Insurance
-	+ CompName VARCHAR(30)
-	+ %Coverage NUMERIC CONSTRAINT CHECK Coverage > 0 and Coverage <= 100
-	+ PolicyNumber NUMERIC
+	+ CompName `VARCHAR(30)`
+	+ %Coverage `NUMERIC` `CONSTRAINT` CHECK Coverage > 0 and Coverage <= 100
+	+ PolicyNumber `NUMERIC`
 ## Query
 Create table data
 ``` SQL {
