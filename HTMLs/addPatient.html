@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<!-- (C)Luan Nguyen May 2022 -->
+<!--Insert Data HTML file-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Insert Data Into a Database</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <form method="post" action="../php/insertPatientInfo.php">
+      <fieldset>
+        <div class="command">Client's information:</div>
+        <label>Full Name: </label><input type="text" name="name" /> <br />
+        <label>DOB: </label><input type="date" name="dob" /> <br />
+
+        <label>Gender</label>
+        <input name="gender" type="radio" value="F" /> <label>Female</label>
+        <input name="gender" type="radio" value="M" /> <label>Male</label>
+        <input name="gender" type="radio" value="X" /> <label>Other</label><br />
+
+        <label>Address</label><input type="text" name="address" /> <br />
+        <label>Phone</label><input type="text" name="phone" /> <br />
+        <label>Credit Card</label><input type="text" name="credit" /> <br />
+        <label>Credit Card Expiry Date (Leave 01 as date)</label><input type="date" name="expiredDate" /> <br />
+        <label>Department</label>
+        <br />
+        <br />
+        <input type="submit" value="Submit" />
+      </fieldset>
+    </form>
+    <br />
+    <a href="../index.html">Back to the homepage</a>
+  </body>
+</html>

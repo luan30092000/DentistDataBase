@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- (C)Luan Nguyen May 2022 -->
+<!--Insert Data HTML file-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Insert Data Into a Database</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <form method="post" action="../php/insertStaffInfo.php">
+      <fieldset>
+        <div class="command">Staff's information:</div>
+        <label>Full Name</label><input type="text" name="staffName" /> <br />
+        <label>DOB</label><input type="date" name="staffDOB" /> <br />
+
+        <label>Gender</label>
+        <input name="gender" type="radio" value="F" /> <label>Female</label>
+        <input name="gender" type="radio" value="M" /> <label>Male</label>
+        <input name="gender" type="radio" value="X" /> <label>Other</label><br />
+        <label>Address</label><input type="text" name="staffAddress" /> <br />
+        <label>Phone</label><input type="text" name="staffPhone" /> <br />
+        <label>Department</label>
+        <select name="staffDepartment">
+          <option>NURSE</option>
+          <option>DOCTOR</option>
+          <option>CLEAN</option>
+          <option>GENERA</option>
+          <option>ASSIST</option>
+        </select>
+        <br />
+        <br />
+        <input type="submit" value="Submit" />
+      </fieldset>
+    </form>
+    <br />
+    <a href="../index.html">Back to the homepage</a>
+  </body>
+</html>

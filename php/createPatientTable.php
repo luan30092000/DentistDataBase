@@ -23,13 +23,12 @@
 	}
 
 	$sql = "CREATE TABLE Patient (
-		PatientID 	CHAR(10),
-		PatientName VARCHAR(30),
-		DOB 		DATE,
-		Gender 		CHAR(1),
-		Department 	CHAR(4),
-		Address 	VARCHAR(50),
-		Phone 		VARCHAR(12),
+		PatientID 	INT NOT NULL AUTO_INCREMENT,
+		Name VARCHAR(30) NOT NULL,
+		DOB 		DATE NOT NULL,
+		Gender 		CHAR(1) NOT NULL,
+		Address 	VARCHAR(50) NOT NULL,
+		Phone 		VARCHAR(12) NOT NULL,
 		Credit 		VARCHAR(16),
 		ExpiredDate	DATE,
 		PRIMARY KEY (PatientID));";

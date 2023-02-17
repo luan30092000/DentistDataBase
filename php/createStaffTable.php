@@ -22,10 +22,12 @@
 		echo "<p style='color:red'>Connection Failed: " . $err->getMessage() . "</p>\r\n";
 	}
 	$sql = "CREATE TABLE Staff (
-		Name 		VARCHAR(30),
-		DOB 		DATE,
-		Department 	CHAR(4),
-		Phone 		VARCHAR(12),
+		Name 		VARCHAR(30) NOT NULL,
+		DOB 		DATE NOT NULL,
+		Department 	CHAR(6) NOT NULL,
+		Phone 		VARCHAR(12) NOT NULL,
+		Address 	VARCHAR(50) NOT NULL,
+
 		PRIMARY KEY (Name));";
 	try {
 		$conn->exec($sql);
